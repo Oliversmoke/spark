@@ -1,0 +1,51 @@
+# Deploy ComeBack.ai to Cloud Run on push to dev (same URL, new revision).
+# One-time setup: ./scripts/setup-github-deploy.sh
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-cloud-run-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GCP_PROJECT_ID: gdg-lagos-bwai-hackathon-2026
+  GCP_REGION: us-central1
+  GCP_SERVICE: comeback-ai
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Write env.cloudrun.yaml from GitHub secret
+        env:
+          ENV_CLOUDRUN_YAML: ${{ secrets.ENV_CLOUDRUN_YAML }}
+        run: |
+          if [ -z "${ENV_CLOUDRUN_YAML}" ]; then
+            echo "::error::Missing repository secret ENV_CLOUDRUN_YAML"
+            echo "Run ./scripts/setup-github-deploy.sh locally, then add the secret in GitHub:"
+            echo "  Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+          printf '%s\n' "${ENV_CLOUDRUN_YAML}" > env.cloudrun.yaml
+
+      - name: Deploy to Cloud Run
+        run: ./scripts/deploy-cloud-run.sh
