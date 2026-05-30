@@ -126,27 +126,27 @@ export const BADGE_META: Record<
   first_log: {
     name: "First Log",
     description: "Logged your first task",
-    icon: "🎯",
+    icon: "target",
   },
   streak_7: {
     name: "7-Day Streak",
     description: "Maintained a 7-day active streak",
-    icon: "🔥",
+    icon: "flame",
   },
   first_checkpoint: {
     name: "First Checkpoint",
     description: "Completed your first checkpoint",
-    icon: "🏁",
+    icon: "flag",
   },
   recovery_hero: {
     name: "Recovery Hero",
     description: "Bounced back within 72 hours of a miss",
-    icon: "💪",
+    icon: "heart-pulse",
   },
   level_5: {
     name: "Level 5",
     description: "Reached level 5",
-    icon: "⭐",
+    icon: "star",
   },
 };
 

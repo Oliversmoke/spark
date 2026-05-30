@@ -24,7 +24,7 @@ export function TaskList({ tasks, goals = [], onLog, loadingTaskId }: TaskListPr
         description="Create a goal from a template or describe one with AI, then your daily tasks will show up here."
         actionLabel="Create a goal"
         actionHref="/goals/new"
-        icon="📋"
+        iconVariant="clipboard"
       />
     );
   }
@@ -42,7 +42,7 @@ export function TaskList({ tasks, goals = [], onLog, loadingTaskId }: TaskListPr
         const loggedCount = goalTasks.filter((t) => t.loggedToday).length;
 
         return (
-          <Card key={goalId}>
+          <Card key={goalId} className="overflow-hidden transition hover:shadow-sm">
             <CardHeader className="space-y-3">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
@@ -102,7 +102,7 @@ function TaskRow({
   return (
     <div
       className={cn(
-        "rounded border p-3 transition",
+        "rounded-lg border p-3 transition hover:border-border-strong",
         status === "completed" && "border-border-low bg-cream/50",
         status === "partial" && "border-border-low bg-cream/30",
         status === "skipped" && "border-border-low bg-bg1"
@@ -156,6 +156,3 @@ function TaskRow({
     </div>
   );
 }
-
-export { StreakBadge, XpBar, GamificationPanel } from "@/components/gamification/gamification-panel";
-export { BadgeGrid } from "@/components/gamification/badge-grid";

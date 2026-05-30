@@ -4,7 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { levelTitle } from "@/lib/gamification";
+import { StreakFlameIcon } from "@/components/icons/app-icons";
 import type { StreakState } from "@/types";
+import { Zap } from "lucide-react";
 
 const streakStyles: Record<StreakState, string> = {
   active: "border-border-low bg-card",
@@ -41,7 +43,7 @@ export function StreakBadge({
       )}
     >
       <div className="flex items-center gap-2 text-sm font-semibold">
-        <span aria-hidden>{state === "at-risk" ? "⚠️" : "🔥"}</span>
+        <StreakFlameIcon state={state} />
         <span>
           {current} day streak
           {!compact && longest !== undefined ? (
@@ -76,7 +78,8 @@ export function XpBar({
     <Card>
       <CardContent className={cn("pt-5", compact && "py-4")}>
         <div className="mb-2 flex items-center justify-between gap-3 text-sm">
-          <div>
+          <div className="flex items-center gap-2">
+            <Zap className="h-4 w-4 text-muted" aria-hidden />
             <span className="font-semibold">Level {level}</span>
             <span className="ml-2 text-muted">{levelTitle(level)}</span>
           </div>

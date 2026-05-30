@@ -21,7 +21,7 @@ export const GOAL_TEMPLATES: GoalTemplate[] = [
     name: "Software Engineering",
     description: "From foundations to shipping a full-stack project",
     category: "skill",
-    icon: "💻",
+    icon: "laptop",
     path: {
       title: "Learn Software Engineering",
       durationWeeks: 24,
@@ -118,7 +118,7 @@ export const GOAL_TEMPLATES: GoalTemplate[] = [
     name: "Gym Bulk",
     description: "Structured bulk program with progressive overload",
     category: "fitness",
-    icon: "🏋️",
+    icon: "dumbbell",
     path: {
       title: "Gym Bulk Program",
       durationWeeks: 16,
@@ -187,7 +187,7 @@ export const GOAL_TEMPLATES: GoalTemplate[] = [
     name: "Language Learning",
     description: "Daily practice path to conversational fluency",
     category: "skill",
-    icon: "🌍",
+    icon: "globe",
     path: {
       title: "Language Learning",
       durationWeeks: 20,
@@ -234,7 +234,7 @@ export const GOAL_TEMPLATES: GoalTemplate[] = [
     name: "Reading Habit",
     description: "Build a consistent daily reading practice",
     category: "habit",
-    icon: "📚",
+    icon: "book-open",
     path: {
       title: "Daily Reading Habit",
       durationWeeks: 12,

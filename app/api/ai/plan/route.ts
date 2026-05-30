@@ -9,6 +9,7 @@ import { Goal } from "@/lib/db/models";
 import { saveChatMessage } from "@/lib/services";
 import { countActiveGoals } from "@/lib/services";
 import { User } from "@/lib/db/models";
+import { FREE_ACTIVE_GOAL_LIMIT } from "@/lib/constants";
 
 const bodySchema = z.object({
   message: z.string().trim().min(8, "Describe your goal in more detail"),
@@ -39,9 +40,17 @@ export async function POST(req: Request) {
   await connectDb();
   const user = await User.findById(session.user.id);
   const activeCount = await countActiveGoals(session.user.id);
-  if (user?.subscriptionTier !== "pro" && activeCount >= 1 && !replaceGoalId && !preview) {
+  if (
+    user?.subscriptionTier !== "pro" &&
+    activeCount >= FREE_ACTIVE_GOAL_LIMIT &&
+    !replaceGoalId &&
+    !preview
+  ) {
     return NextResponse.json(
-      { error: "Free tier allows 1 active goal.", retryable: false },
+      {
+        error: `Free tier allows ${FREE_ACTIVE_GOAL_LIMIT} active goals.`,
+        retryable: false,
+      },
       { status: 403 }
     );
   }
@@ -72,9 +81,16 @@ export async function POST(req: Request) {
     );
   }
 
-  if (!replaceGoalId && user?.subscriptionTier !== "pro" && activeCount >= 1) {
+  if (
+    !replaceGoalId &&
+    user?.subscriptionTier !== "pro" &&
+    activeCount >= FREE_ACTIVE_GOAL_LIMIT
+  ) {
     return NextResponse.json(
-      { error: "Free tier allows 1 active goal.", retryable: false },
+      {
+        error: `Free tier allows ${FREE_ACTIVE_GOAL_LIMIT} active goals.`,
+        retryable: false,
+      },
       { status: 403 }
     );
   }

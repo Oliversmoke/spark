@@ -102,7 +102,7 @@ function SettingsContent() {
               <div className="pt-2 space-y-2">
                 {typeof user?.aiRemaining === "number" ? (
                   <p className="text-muted text-xs">
-                    AI coach: {user.aiRemaining} of {user.aiLimit ?? 100} messages left
+                    AI coach: {user.aiRemaining} of {user.aiLimit ?? 100} messages left · up to 20 active goals on free
                   </p>
                 ) : null}
                 <Link href="/pricing">

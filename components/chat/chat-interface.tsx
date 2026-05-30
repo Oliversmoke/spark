@@ -6,9 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/input";
 import { RecoveryPlanCard } from "@/components/recovery/recovery-plan-card";
 import { WeeklyReviewCard } from "@/components/reviews/weekly-review-card";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, Sparkles, Target, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { RecoveryPlan, WeeklyReviewDTO } from "@/types";
 
 interface Message {
   id: string;
@@ -35,16 +34,21 @@ interface ChatInterfaceProps {
   onDismissReview?: (reviewId: string) => Promise<void>;
 }
 
-function planFromMetadata(metadata?: Record<string, unknown>): RecoveryPlan | null {
+const QUICK_PROMPTS = [
+  { label: "New goal", text: "I want to learn React in 3 months", icon: Target },
+  { label: "Log today", text: "I finished today's tasks", icon: CheckCircle2 },
+] as const;
+
+function planFromMetadata(metadata?: Record<string, unknown>) {
   const plan = metadata?.plan;
   if (!plan || typeof plan !== "object") return null;
-  return plan as RecoveryPlan;
+  return plan as import("@/types").RecoveryPlan;
 }
 
-function reviewFromMetadata(metadata?: Record<string, unknown>): WeeklyReviewDTO | null {
+function reviewFromMetadata(metadata?: Record<string, unknown>) {
   const review = metadata?.review;
   if (!review || typeof review !== "object") return null;
-  return review as WeeklyReviewDTO;
+  return review as import("@/types").WeeklyReviewDTO;
 }
 
 function messageGoalId(msg: Message) {
@@ -76,12 +80,12 @@ export function ChatInterface({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  async function handleSend() {
-    const text = input.trim();
+  async function handleSend(textOverride?: string) {
+    const text = (textOverride ?? input).trim();
     if (!text || loading) return;
 
     setMessages((m) => [...m, { id: `temp-${Date.now()}`, role: "user", content: text }]);
-    setInput("");
+    if (!textOverride) setInput("");
     setLoading(true);
 
     try {
@@ -98,7 +102,7 @@ export function ChatInterface({
       ]);
     } catch {
       setMessages((m) => m.slice(0, -1));
-      setInput(text);
+      if (!textOverride) setInput(text);
     } finally {
       setLoading(false);
     }
@@ -117,7 +121,7 @@ export function ChatInterface({
   }
 
   return (
-    <div className="flex min-h-[420px] flex-col rounded border border-border-low bg-card max-md:h-[calc(100dvh-17rem)] md:min-h-[520px]">
+    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-xl border border-border-low bg-card shadow-sm max-md:h-[calc(100dvh-17rem)] md:min-h-[520px]">
       <div
         className="arc-app-scroll flex-1 space-y-3 overflow-y-auto p-4"
         role="log"
@@ -125,12 +129,33 @@ export function ChatInterface({
         aria-label="Chat messages"
       >
         {messages.length === 0 && (
-          <div className="rounded border border-border-low bg-cream/40 p-4 text-sm">
-            <p className="font-semibold">Hey — I&apos;m your ComeBack.ai coach.</p>
-            <p className="mt-1 text-muted">
-              Tell me a goal like &quot;I want to learn React in 3 months&quot; or log
-              tasks like &quot;finished my workout today&quot;.
-            </p>
+          <div className="rounded-xl border border-border-low bg-linear-to-br from-cream/50 to-card p-5">
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-low bg-card">
+                <Sparkles className="h-5 w-5" aria-hidden />
+              </span>
+              <div>
+                <p className="font-semibold">Hey — I&apos;m your ComeBack.ai coach</p>
+                <p className="mt-1 text-sm text-muted">
+                  Describe a goal, log what you finished today, or ask for help getting back on
+                  track.
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {QUICK_PROMPTS.map(({ label, text, icon: Icon }) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => handleSend(text)}
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 rounded-full border border-border-low bg-card px-3 py-1.5 text-xs font-semibold transition hover:bg-cream/60 active:scale-[0.98]"
+                >
+                  <Icon className="h-3.5 w-3.5" aria-hidden />
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {messages.map((msg, index) => {
@@ -160,7 +185,7 @@ export function ChatInterface({
             <div
               key={msg.id}
               className={cn(
-                "max-w-[92%] rounded px-4 py-3 text-sm leading-relaxed",
+                "max-w-[92%] rounded-xl px-4 py-3 text-sm leading-relaxed transition",
                 msg.role === "user"
                   ? "ml-auto bg-foreground text-background"
                   : "border border-border-low bg-bg1"
@@ -210,15 +235,14 @@ export function ChatInterface({
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-border-low p-4">
+      <div className="border-t border-border-low bg-card/80 p-3 backdrop-blur-sm">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
-          className="space-y-2"
         >
-          <div className="flex gap-2">
+          <div className="flex items-end gap-2">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -232,19 +256,20 @@ export function ChatInterface({
                 }
               }}
               aria-describedby="chat-input-hint"
-              className="min-h-[44px] resize-none"
+              className="min-h-[44px] flex-1 resize-none py-2.5"
             />
             <Button
               type="submit"
               size="icon"
               disabled={loading || !input.trim()}
               aria-label="Send message"
+              className="h-11 w-11 shrink-0 rounded-lg"
             >
               <Send className="h-4 w-4" />
             </Button>
           </div>
-          <p id="chat-input-hint" className="sr-only">
-            Enter to send, Shift+Enter for a new line
+          <p id="chat-input-hint" className="mt-1.5 text-center text-[11px] text-muted">
+            Enter to send · Shift+Enter for new line
           </p>
         </form>
       </div>

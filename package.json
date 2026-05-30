@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy:gcp": "bash scripts/deploy-cloud-run.sh"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",

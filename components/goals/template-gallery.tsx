@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { PathPreview } from "@/components/goals/path-preview";
 import { EmptyState } from "@/components/arc/empty-state";
 import { StandardPageSkeleton } from "@/components/arc/skeleton-ui";
+import { TemplateIcon } from "@/components/icons/app-icons";
 import { useToast } from "@/components/arc/toast";
 import { cn } from "@/lib/utils";
+import { ChevronRight, LayoutGrid } from "lucide-react";
 import type { Path } from "@/types";
 
 type TemplateSummary = {
@@ -82,7 +84,7 @@ export function TemplateGallery({
           variant: "error",
           message:
             res.status === 403
-              ? `${data.error ?? "Upgrade required"} Visit Pricing for more goals.`
+              ? `${data.error ?? "Goal limit reached"} Visit Pricing for unlimited.`
               : (data.error ?? "Failed to create goal"),
           duration: 6000,
         });
@@ -109,12 +111,18 @@ export function TemplateGallery({
         description="Templates will appear here when available. Use Describe goal or Chat instead."
         actionLabel="Describe a goal"
         actionHref="/goals/new"
+        iconVariant="sparkles"
       />
     );
   }
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-2 text-sm text-muted">
+        <LayoutGrid className="h-4 w-4" aria-hidden />
+        <span>Pick a proven path — tap to preview, then start when ready.</span>
+      </div>
+
       <div
         className="flex flex-wrap gap-2"
         role="tablist"
@@ -128,10 +136,10 @@ export function TemplateGallery({
             aria-selected={category === cat.id}
             onClick={() => setCategory(cat.id)}
             className={cn(
-              "rounded border px-3 py-1.5 text-sm font-semibold transition",
+              "rounded-full border px-4 py-2 text-sm font-semibold transition active:scale-[0.98]",
               category === cat.id
-                ? "border-border-low bg-card text-foreground"
-                : "border-transparent text-muted hover:text-foreground"
+                ? "border-foreground bg-foreground text-background"
+                : "border-border-low bg-card text-muted hover:border-border-strong hover:text-foreground"
             )}
           >
             {cat.label}
@@ -144,8 +152,8 @@ export function TemplateGallery({
           <Card
             key={t.id}
             className={cn(
-              "cursor-pointer transition hover:-translate-y-0.5 hover:bg-cream/20",
-              selectedId === t.id && "ring-1 ring-border-strong"
+              "cursor-pointer transition hover:-translate-y-0.5 hover:shadow-md",
+              selectedId === t.id && "ring-2 ring-foreground/20"
             )}
             onClick={() => setSelectedId(t.id)}
             onKeyDown={(e) => {
@@ -159,25 +167,30 @@ export function TemplateGallery({
             aria-pressed={selectedId === t.id}
             aria-label={`Preview ${t.name} template`}
           >
-            <CardHeader className="flex-row items-start gap-3 space-y-0">
-              <span className="text-3xl" aria-hidden>
-                {t.icon}
-              </span>
-              <div className="flex-1">
-                <CardTitle>{t.name}</CardTitle>
-                <p className="mt-1 text-sm text-muted">{t.description}</p>
-                <p className="mt-1 text-xs text-muted">
+            <CardHeader className="flex-row items-center gap-3 space-y-0 pb-2">
+              <TemplateIcon name={t.icon} />
+              <div className="min-w-0 flex-1">
+                <CardTitle className="text-base">{t.name}</CardTitle>
+                <p className="mt-1 line-clamp-2 text-sm text-muted">{t.description}</p>
+                <p className="mt-2 text-xs font-medium text-muted">
                   {t.durationWeeks} weeks · {t.phaseCount} phase
                   {t.phaseCount === 1 ? "" : "s"}
                 </p>
               </div>
+              <ChevronRight
+                className={cn(
+                  "h-5 w-5 shrink-0 text-muted transition",
+                  selectedId === t.id && "translate-x-0.5 text-foreground"
+                )}
+                aria-hidden
+              />
             </CardHeader>
           </Card>
         ))}
       </div>
 
       {selectedId ? (
-        <div className="space-y-4 rounded border border-border-low bg-cream/20 p-4">
+        <div className="space-y-4 rounded-xl border border-border-low bg-cream/20 p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">Template preview</p>
@@ -189,8 +202,10 @@ export function TemplateGallery({
               size="sm"
               disabled={creating || previewLoading || !previewPath}
               onClick={() => createFromTemplate(selectedId)}
+              className="gap-1"
             >
               {creating ? "Creating…" : "Start this template"}
+              {!creating ? <ChevronRight className="h-4 w-4" /> : null}
             </Button>
           </div>
 
@@ -201,8 +216,8 @@ export function TemplateGallery({
           ) : null}
         </div>
       ) : (
-        <p className="text-center text-sm text-muted">
-          Select a template to preview its full path.
+        <p className="rounded-lg border border-dashed border-border-low py-8 text-center text-sm text-muted">
+          Select a template above to preview its full path.
         </p>
       )}
     </div>

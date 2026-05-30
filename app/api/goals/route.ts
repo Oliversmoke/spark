@@ -8,6 +8,7 @@ import { assignPathIds } from "@/lib/path-utils";
 import { PathSchema } from "@/types";
 import { User } from "@/lib/db/models";
 import { trackEvent } from "@/lib/rate-limit";
+import { FREE_ACTIVE_GOAL_LIMIT } from "@/lib/constants";
 
 export async function GET() {
   const session = await getSession();
@@ -44,9 +45,11 @@ export async function POST(req: Request) {
   const activeCount = await countActiveGoals(session.user.id);
   const isPro = user?.subscriptionTier === "pro";
 
-  if (!isPro && activeCount >= 1 && body.status !== "archived") {
+  if (!isPro && activeCount >= FREE_ACTIVE_GOAL_LIMIT && body.status !== "archived") {
     return NextResponse.json(
-      { error: "Free tier allows 1 active goal. Upgrade to Pro for unlimited." },
+      {
+        error: `Free tier allows ${FREE_ACTIVE_GOAL_LIMIT} active goals. Upgrade to Pro for unlimited.`,
+      },
       { status: 403 }
     );
   }

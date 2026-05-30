@@ -46,7 +46,7 @@ export default function PricingPage() {
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               {[
-                "1 active goal",
+                "20 active goals",
                 "100 AI coach messages",
                 "Recovery coach",
                 "XP & streaks",
