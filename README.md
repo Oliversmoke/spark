@@ -327,7 +327,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Team
 
-Built with ❤️ by the ComeBack AI team for the Build With AI Hackathon, GDG Lagos 2025.
+Built with ❤️ by the Spark team for the Build With AI Hackathon, GDG Lagos 2026.
 
 ---
 
