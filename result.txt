@@ -1,0 +1,10 @@
+GEMINI_API_KEY is failing — AI plan generation returned “Could not generate your plan right now.” The key format looks wrong for Google AI Studio (needs a key from aistudio.google.com). Templates still work; chat-based AI planning does not until this is fixed.
+
+CRON_SECRET is unset — /api/cron is publicly callable. Anyone can trigger recovery/reminder jobs. Set this before Vercel deploy.
+
+VAPID keys are unset — Push notifications are disabled (vapidConfigured: false). Reminder cron will run but cannot send push.
+
+AUTH_URL — Still http://localhost:3000. Update to your production URL before deploy.
+
+Optional but recommended: ADMIN_EMAILS for /admin, Stripe keys if you want Pro checkout live.
+
