@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ComeBack.ai — Manual Test Guide</title>
+  <style>
+    :root { --ink: #000; --paper: #fff; --muted: #444; --line: #000; --soft: #f0f0f0; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font: 17px/1.65 Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    header {
+      border-bottom: 3px double var(--line);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 { font-size: 1.75rem; margin: 0 0 .5rem; font-weight: 700; letter-spacing: -.02em; }
+    .lede { color: var(--muted); font-size: 1rem; margin: 0; }
+    .setup {
+      border: 1px solid var(--line);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      background: var(--soft);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+    .setup label { display: block; font-weight: 600; margin-bottom: .35rem; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+    .setup input {
+      width: 100%; border: 1px solid var(--line); padding: .5rem;
+      font: inherit; background: #fff;
+    }
+    nav {
+      border: 1px solid var(--line);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    nav h2 { margin: 0 0 .75rem; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; }
+    nav ol { margin: 0; padding-left: 1.25rem; }
+    nav li { margin: .35rem 0; }
+    nav a { color: var(--ink); }
+    section {
+      margin-bottom: 2.5rem;
+      page-break-inside: avoid;
+    }
+    section > h2 {
+      font-size: 1.25rem;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: .35rem;
+      margin: 0 0 1rem;
+    }
+    .meta {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .meta strong { color: var(--ink); }
+    .route {
+      display: inline-block;
+      font-family: ui-monospace, monospace;
+      font-size: .8rem;
+      border: 1px solid var(--line);
+      padding: .1rem .45rem;
+      margin-right: .35rem;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .route:hover { background: var(--soft); }
+    h3 {
+      font-size: 1rem;
+      margin: 1.25rem 0 .5rem;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    p { margin: 0 0 .75rem; }
+    ul.expect { margin: .5rem 0 1rem; padding-left: 1.25rem; color: var(--muted); font-size: .95rem; }
+    ul.expect li { margin: .25rem 0; }
+    ul.expect strong { color: var(--ink); }
+    ol.steps { list-style: none; padding: 0; margin: 0; }
+    ol.steps li {
+      display: grid;
+      grid-template-columns: 1.4rem 1fr;
+      gap: .65rem;
+      padding: .65rem 0;
+      border-bottom: 1px dotted #999;
+      align-items: start;
+    }
+    ol.steps li:last-child { border-bottom: none; }
+    ol.steps input[type="checkbox"] {
+      width: 1.1rem; height: 1.1rem; margin-top: .25rem;
+      accent-color: #000;
+    }
+    .step-text { font-size: .98rem; }
+    .step-text em { font-style: italic; color: var(--muted); }
+    .note {
+      border-left: 3px solid var(--line);
+      padding: .5rem .85rem;
+      margin: 1rem 0;
+      background: var(--soft);
+      font-size: .92rem;
+    }
+    .progress-bar {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: .85rem;
+      margin-top: 1rem;
+    }
+    @media print {
+      .setup input { border: none; padding: 0; }
+      nav { break-after: page; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>ComeBack.ai Manual Test Guide</h1>
+      <p class="lede">
+        Walk through every feature and user flow yourself. Check each box as you go.
+        Open this file in a browser beside the app — no automation, just you verifying behavior.
+      </p>
+      <div class="setup">
+        <label for="base">Your app URL (change if not on localhost)</label>
+        <input id="base" type="text" value="http://localhost:3000" />
+        <p style="margin:.75rem 0 0;font-size:.85rem;">
+          Start the app with <code>npm run dev</code>, then use the route links below. Progress is saved in this browser.
+        </p>
+        <p class="progress-bar">Progress: <strong id="prog">0 / 0</strong> steps checked</p>
+      </div>
+    </header>
+
+    <nav>
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#s0">Before you start</a></li>
+        <li><a href="#s1">Landing &amp; auth</a></li>
+        <li><a href="#s2">Onboarding</a></li>
+        <li><a href="#s3">Create a goal (templates)</a></li>
+        <li><a href="#s4">Create a goal (wizard &amp; chat)</a></li>
+        <li><a href="#s5">View your plan</a></li>
+        <li><a href="#s6">Today — daily logging</a></li>
+        <li><a href="#s7">Chat coach</a></li>
+        <li><a href="#s8">Progress &amp; gamification</a></li>
+        <li><a href="#s9">Recovery coach</a></li>
+        <li><a href="#s10">Weekly review</a></li>
+        <li><a href="#s11">Settings &amp; export</a></li>
+        <li><a href="#s12">PWA &amp; offline</a></li>
+        <li><a href="#s13">Pricing &amp; Pro</a></li>
+        <li><a href="#s14">Admin (optional)</a></li>
+        <li><a href="#s15">Edge cases</a></li>
+      </ol>
+    </nav>
+
+    <!-- 0 -->
+    <section id="s0">
+      <h2>0. Before you start</h2>
+      <p class="meta"><strong>Need:</strong> MongoDB connected, <code>AUTH_SECRET</code> set, app running.</p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s0-1" /><span class="step-text">Run <code>npm run dev</code> and confirm no startup errors.</span></li>
+        <li><input type="checkbox" data-id="s0-2" /><span class="step-text">Visit <a class="route" data-path="/api/health" href="#">/api/health</a> — response shows <strong>db: "ok"</strong>.</span></li>
+        <li><input type="checkbox" data-id="s0-3" /><span class="step-text">Use a <strong>fresh test email</strong> you have not signed up with before (e.g. <em>you+test1@example.com</em>).</span></li>
+        <li><input type="checkbox" data-id="s0-4" /><span class="step-text">Optional: open DevTools → Network to watch API calls as you test.</span></li>
+      </ol>
+    </section>
+
+    <!-- 1 -->
+    <section id="s1">
+      <h2>1. Landing &amp; auth</h2>
+      <p class="meta">
+        <a class="route" data-path="/" href="#">/</a>
+        <a class="route" data-path="/signup" href="#">/signup</a>
+        <a class="route" data-path="/login" href="#">/login</a>
+      </p>
+      <h3>1a — Landing page (logged out)</h3>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s1-1" /><span class="step-text">Open the home page. You see ComeBack.ai branding and a call to get started.</span></li>
+        <li><input type="checkbox" data-id="s1-2" /><span class="step-text">Click through to Sign up.</span></li>
+      </ol>
+      <h3>1b — Sign up</h3>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s1-3" /><span class="step-text">Enter name, email, password (8+ chars), confirm password. Submit.</span></li>
+        <li><input type="checkbox" data-id="s1-4" /><span class="step-text">You land in the app (usually <strong>Chat</strong>). No red error toast.</span></li>
+        <li><input type="checkbox" data-id="s1-5" /><span class="step-text">Try signing up again with the same email — you get a clear error (duplicate account).</span></li>
+      </ol>
+      <ul class="expect">
+        <li><strong>Expect:</strong> Toast errors use theme styling, not harsh red blocks.</li>
+      </ul>
+      <h3>1c — Log out &amp; log back in</h3>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s1-6" /><span class="step-text">Go to Settings → Log out. You return to login.</span></li>
+        <li><input type="checkbox" data-id="s1-7" /><span class="step-text">Visit <a class="route" data-path="/today" href="#">/today</a> while logged out — redirected to login.</span></li>
+        <li><input type="checkbox" data-id="s1-8" /><span class="step-text">Log in with your test account. You return to the app.</span></li>
+        <li><input type="checkbox" data-id="s1-9" /><span class="step-text">Wrong password shows an error toast, not a crash.</span></li>
+      </ol>
+    </section>
+
+    <!-- 2 -->
+    <section id="s2">
+      <h2>2. Onboarding</h2>
+      <p class="meta">First visit after signup (or reset onboarding in DB for retest).</p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s2-1" /><span class="step-text">A 3-step tour appears: set goal → log task → understand recovery.</span></li>
+        <li><input type="checkbox" data-id="s2-2" /><span class="step-text">Step through all 3. Links open Today, goal creation, or Chat.</span></li>
+        <li><input type="checkbox" data-id="s2-3" /><span class="step-text">Finish the tour. It does not show again on refresh.</span></li>
+      </ol>
+    </section>
+
+    <!-- 3 -->
+    <section id="s3">
+      <h2>3. Create a goal — templates</h2>
+      <p class="meta"><a class="route" data-path="/goals/new" href="#">/goals/new</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s3-1" /><span class="step-text">Open <strong>New goal</strong>. Template gallery shows 4 paths: Software Engineering, Gym Bulk, Language Learning, Reading Habit.</span></li>
+        <li><input type="checkbox" data-id="s3-2" /><span class="step-text">Pick <strong>Reading Habit</strong> (or any template). Preview shows phases and tasks.</span></li>
+        <li><input type="checkbox" data-id="s3-3" /><span class="step-text">Confirm / create the goal. Success toast or redirect to plan.</span></li>
+        <li><input type="checkbox" data-id="s3-4" /><span class="step-text">Try creating a <strong>second</strong> active goal — blocked on free tier with upgrade message.</span></li>
+      </ol>
+      <ul class="expect">
+        <li><strong>Expect:</strong> Free tier = 1 active goal. Archive or complete first goal before adding another (unless Pro).</li>
+      </ul>
+    </section>
+
+    <!-- 4 -->
+    <section id="s4">
+      <h2>4. Create a goal — wizard &amp; chat</h2>
+      <p class="meta">
+        <a class="route" data-path="/goals/new" href="#">/goals/new</a>
+        <a class="route" data-path="/chat" href="#">/chat</a>
+      </p>
+      <div class="note">Archive your current goal first (Goal detail page) or use a new test account for this section.</div>
+      <h3>4a — Form wizard</h3>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s4-1" /><span class="step-text">On <strong>/goals/new</strong>, switch to the form/wizard (non-template) path if available.</span></li>
+        <li><input type="checkbox" data-id="s4-2" /><span class="step-text">Describe a goal (e.g. “Learn React in 3 months”). Generate preview.</span></li>
+        <li><input type="checkbox" data-id="s4-3" /><span class="step-text">Review the path preview (phases, checkpoints, tasks) before saving.</span></li>
+        <li><input type="checkbox" data-id="s4-4" /><span class="step-text">Save the plan. Goal appears in your list.</span></li>
+      </ol>
+      <h3>4b — Chat goal creation</h3>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s4-5" /><span class="step-text">In <strong>Chat</strong>, send: <em>“I want to learn software engineering”</em> or similar goal phrase.</span></li>
+        <li><input type="checkbox" data-id="s4-6" /><span class="step-text">Coach generates a path (requires valid <code>GEMINI_API_KEY</code>) or shows retry message if AI fails.</span></li>
+        <li><input type="checkbox" data-id="s4-7" /><span class="step-text">Chat shows plan-created message with link to view plan.</span></li>
+      </ol>
+    </section>
+
+    <!-- 5 -->
+    <section id="s5">
+      <h2>5. View your plan</h2>
+      <p class="meta"><a class="route" data-path="/goals/[id]" href="#">/goals/[id]</a> — open from Progress or goal list</p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s5-1" /><span class="step-text">Open your active goal’s detail page.</span></li>
+        <li><input type="checkbox" data-id="s5-2" /><span class="step-text">See full path: phases → checkpoints → tasks with durations.</span></li>
+        <li><input type="checkbox" data-id="s5-3" /><span class="step-text">Checkpoint progress bar reflects logs so far.</span></li>
+        <li><input type="checkbox" data-id="s5-4" /><span class="step-text">If in recovery mode, recovery plan card appears here too.</span></li>
+      </ol>
+    </section>
+
+    <!-- 6 -->
+    <section id="s6">
+      <h2>6. Today — daily logging</h2>
+      <p class="meta"><a class="route" data-path="/today" href="#">/today</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s6-1" /><span class="step-text">Today lists tasks due today, grouped by goal.</span></li>
+        <li><input type="checkbox" data-id="s6-2" /><span class="step-text">Tap <strong>Done</strong> on a task — optimistic UI, then confirms. XP toast if earned.</span></li>
+        <li><input type="checkbox" data-id="s6-3" /><span class="step-text">Tap <strong>Partial</strong> on another task — stores partial status (+5 XP).</span></li>
+        <li><input type="checkbox" data-id="s6-4" /><span class="step-text">Tap <strong>Skip</strong> on a task — stored as skipped, no full XP.</span></li>
+        <li><input type="checkbox" data-id="s6-5" /><span class="step-text">Checkpoint progress updates without full page reload.</span></li>
+        <li><input type="checkbox" data-id="s6-6" /><span class="step-text"><strong>14-day history</strong> section shows recent logs with dates and statuses.</span></li>
+        <li><input type="checkbox" data-id="s6-7" /><span class="step-text">Gamification panel shows XP bar, level, and streak state.</span></li>
+        <li><input type="checkbox" data-id="s6-8" /><span class="step-text">Refresh button reloads tasks and history.</span></li>
+      </ol>
+      <ul class="expect">
+        <li><strong>Expect:</strong> First log earns <strong>First Log</strong> badge.</li>
+      </ul>
+    </section>
+
+    <!-- 7 -->
+    <section id="s7">
+      <h2>7. Chat coach</h2>
+      <p class="meta"><a class="route" data-path="/chat" href="#">/chat</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s7-1" /><span class="step-text">Chat loads prior messages (including plan creation if any).</span></li>
+        <li><input type="checkbox" data-id="s7-2" /><span class="step-text">Send <em>“I finished reading today”</em> or <em>“done for today”</em> — tasks log via chat.</span></li>
+        <li><input type="checkbox" data-id="s7-3" /><span class="step-text">Success toast shows XP / badges when applicable.</span></li>
+        <li><input type="checkbox" data-id="s7-4" /><span class="step-text">Send a general question — coach replies helpfully (not only logging).</span></li>
+        <li><input type="checkbox" data-id="s7-5" /><span class="step-text">Recovery banner appears when a goal is in recovery mode.</span></li>
+        <li><input type="checkbox" data-id="s7-6" /><span class="step-text">Weekly review banner appears when a review is pending.</span></li>
+      </ol>
+    </section>
+
+    <!-- 8 -->
+    <section id="s8">
+      <h2>8. Progress &amp; gamification</h2>
+      <p class="meta"><a class="route" data-path="/progress" href="#">/progress</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s8-1" /><span class="step-text">XP total and level title match what you earned from logging.</span></li>
+        <li><input type="checkbox" data-id="s8-2" /><span class="step-text">Streak shows state: active, at-risk, broken, or recovering.</span></li>
+        <li><input type="checkbox" data-id="s8-3" /><span class="step-text">Badge grid shows earned badges (First Log, etc.). Locked badges are visible.</span></li>
+        <li><input type="checkbox" data-id="s8-4" /><span class="step-text">Per-goal cards show checkpoint progress and recovery status.</span></li>
+        <li><input type="checkbox" data-id="s8-5" /><span class="step-text">Activity history (14 days) matches Today page.</span></li>
+      </ol>
+    </section>
+
+    <!-- 9 -->
+    <section id="s9">
+      <h2>9. Recovery coach</h2>
+      <p class="meta">Core differentiator — miss → plan → re-engage</p>
+      <div class="note">In development only: Goal detail page may have “Simulate miss” for testing. In production, recovery triggers after grace period without logs.</div>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s9-1" /><span class="step-text">Trigger recovery (simulate in dev, or wait / manually backdate logs in DB).</span></li>
+        <li><input type="checkbox" data-id="s9-2" /><span class="step-text">Recovery banner on Today and Chat with empathetic copy — no shaming.</span></li>
+        <li><input type="checkbox" data-id="s9-3" /><span class="step-text">Recovery plan shows minimum viable day and adjusted tasks.</span></li>
+        <li><input type="checkbox" data-id="s9-4" /><span class="step-text"><strong>Accept</strong> recovery plan — tasks/deadlines update; path version increments.</span></li>
+        <li><input type="checkbox" data-id="s9-5" /><span class="step-text"><strong>Adjust</strong> in chat — send why you missed; coach regenerates plan.</span></li>
+        <li><input type="checkbox" data-id="s9-6" /><span class="step-text">Log within 72h of miss — eligible for Recovery Hero badge.</span></li>
+      </ol>
+    </section>
+
+    <!-- 10 -->
+    <section id="s10">
+      <h2>10. Weekly review</h2>
+      <p class="meta"><a class="route" data-path="/progress" href="#">/progress</a> and <a class="route" data-path="/chat" href="#">/chat</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s10-1" /><span class="step-text">On Progress, pick a goal and click generate weekly review.</span></li>
+        <li><input type="checkbox" data-id="s10-2" /><span class="step-text">Review references your actual log data from the past week.</span></li>
+        <li><input type="checkbox" data-id="s10-3" /><span class="step-text">Suggested adjustments (add/remove/resize tasks) are readable.</span></li>
+        <li><input type="checkbox" data-id="s10-4" /><span class="step-text"><strong>Accept</strong> adjustments — active path updates, history preserved via pathVersion.</span></li>
+        <li><input type="checkbox" data-id="s10-5" /><span class="step-text"><strong>Dismiss</strong> review — no path changes.</span></li>
+        <li><input type="checkbox" data-id="s10-6" /><span class="step-text">Same review accessible from Chat banner.</span></li>
+      </ol>
+    </section>
+
+    <!-- 11 -->
+    <section id="s11">
+      <h2>11. Settings &amp; export</h2>
+      <p class="meta"><a class="route" data-path="/settings" href="#">/settings</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s11-1" /><span class="step-text">Settings shows your plan tier (free / pro).</span></li>
+        <li><input type="checkbox" data-id="s11-2" /><span class="step-text">Change reminder time — saves with success toast.</span></li>
+        <li><input type="checkbox" data-id="s11-3" /><span class="step-text">Set timezone and weekly review day — persists after refresh.</span></li>
+        <li><input type="checkbox" data-id="s11-4" /><span class="step-text">Configure quiet hours (start / end).</span></li>
+        <li><input type="checkbox" data-id="s11-5" /><span class="step-text">Toggle push notifications (requires VAPID keys + browser permission).</span></li>
+        <li><input type="checkbox" data-id="s11-6" /><span class="step-text"><strong>Export data</strong> downloads <code>comeback-ai-export.json</code> with goals and logs.</span></li>
+        <li><input type="checkbox" data-id="s11-7" /><span class="step-text">Log out from Settings works.</span></li>
+      </ol>
+    </section>
+
+    <!-- 12 -->
+    <section id="s12">
+      <h2>12. PWA &amp; offline</h2>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s12-1" /><span class="step-text">Production build (<code>npm run build && npm start</code>): install prompt or “Add to Home Screen” works.</span></li>
+        <li><input type="checkbox" data-id="s12-2" /><span class="step-text">Installed app opens to Today with standalone display.</span></li>
+        <li><input type="checkbox" data-id="s12-3" /><span class="step-text">Load Today once online, then go offline — cached tasks/history still visible.</span></li>
+        <li><input type="checkbox" data-id="s12-4" /><span class="step-text">Offline banner explains you’re viewing cached data.</span></li>
+        <li><input type="checkbox" data-id="s12-5" /><span class="step-text">Push reminder fires at configured time (needs VAPID + cron on Vercel).</span></li>
+      </ol>
+      <div class="note">Service worker is disabled in dev mode. Test PWA with a production build.</div>
+    </section>
+
+    <!-- 13 -->
+    <section id="s13">
+      <h2>13. Pricing &amp; Pro</h2>
+      <p class="meta"><a class="route" data-path="/pricing" href="#">/pricing</a></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s13-1" /><span class="step-text">Pricing page compares Free vs Pro features.</span></li>
+        <li><input type="checkbox" data-id="s13-2" /><span class="step-text">Upgrade button opens Stripe checkout (or “not configured” if keys missing).</span></li>
+        <li><input type="checkbox" data-id="s13-3" /><span class="step-text">After successful checkout (test mode), Settings shows Pro and unlimited goals.</span></li>
+      </ol>
+    </section>
+
+    <!-- 14 -->
+    <section id="s14">
+      <h2>14. Admin (optional)</h2>
+      <p class="meta"><a class="route" data-path="/admin" href="#">/admin</a> — your email must be in <code>ADMIN_EMAILS</code></p>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s14-1" /><span class="step-text">Non-admin account gets forbidden / redirect on /admin.</span></li>
+        <li><input type="checkbox" data-id="s14-2" /><span class="step-text">Admin sees user count, active goals, logs, recovery funnel metrics.</span></li>
+      </ol>
+    </section>
+
+    <!-- 15 -->
+    <section id="s15">
+      <h2>15. Edge cases</h2>
+      <ol class="steps">
+        <li><input type="checkbox" data-id="s15-1" /><span class="step-text">Mobile width (375px): bottom nav works — Chat, Today, Progress, Settings.</span></li>
+        <li><input type="checkbox" data-id="s15-2" /><span class="step-text">Keyboard: Tab through forms and chat input; focus visible.</span></li>
+        <li><input type="checkbox" data-id="s15-3" /><span class="step-text">Invalid AI output (if Gemini returns bad JSON) — user sees retry message, not a crash.</span></li>
+        <li><input type="checkbox" data-id="s15-4" /><span class="step-text">AI rate limit hit — Today quick-log still works; chat explains limit.</span></li>
+        <li><input type="checkbox" data-id="s15-5" /><span class="step-text">404 page renders for unknown routes.</span></li>
+        <li><input type="checkbox" data-id="s15-6" /><span class="step-text">Full loop complete: goal → log daily → miss → recover → weekly review → export.</span></li>
+      </ol>
+    </section>
+
+    <footer style="border-top:2px solid #000;padding-top:1rem;margin-top:2rem;font-size:.9rem;color:#444;">
+      ComeBack.ai manual test guide · Checkboxes save in localStorage · Print this page for a paper checklist
+    </footer>
+  </div>
+
+  <script>
+    const baseInput = document.getElementById("base");
+    const progEl = document.getElementById("prog");
+    const STORAGE = "comeback-manual-test-v1";
+
+    function getBase() {
+      return (baseInput.value || "http://localhost:3000").replace(/\/$/, "");
+    }
+
+    baseInput.addEventListener("change", updateLinks);
+    baseInput.addEventListener("input", updateLinks);
+
+    function updateLinks() {
+      const base = getBase();
+      document.querySelectorAll("[data-path]").forEach((a) => {
+        const path = a.getAttribute("data-path");
+        a.href = path.includes("[") ? base : base + path;
+        if (path.includes("[id]")) a.removeAttribute("href");
+      });
+    }
+
+    function loadChecks() {
+      try { return JSON.parse(localStorage.getItem(STORAGE) || "{}"); } catch { return {}; }
+    }
+
+    function saveChecks(data) {
+      localStorage.setItem(STORAGE, JSON.stringify(data));
+    }
+
+    function updateProgress() {
+      const boxes = document.querySelectorAll('input[type="checkbox"][data-id]');
+      const done = [...boxes].filter((b) => b.checked).length;
+      progEl.textContent = done + " / " + boxes.length;
+    }
+
+    const saved = loadChecks();
+    document.querySelectorAll('input[type="checkbox"][data-id]').forEach((box) => {
+      if (saved[box.dataset.id]) box.checked = true;
+      box.addEventListener("change", () => {
+        const data = loadChecks();
+        data[box.dataset.id] = box.checked;
+        saveChecks(data);
+        updateProgress();
+      });
+    });
+
+    updateLinks();
+    updateProgress();
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+It IS AN AI AGENT THAT  helps you keep track of progress
+when learning a skill and also helps you recover if you miss checkpooints or tasks as youre trying to reach your goal
+it is basically a gamified experience for learning skills and building habits.
+using notifications prompts etc
+ai powered recovery coach to mainly help you keep track of habits and checkpoints with personalized recovery guides etc 
+like if i wanna learn software engineering or i wann bulk at the gym it gives me varoius tasks and checkpoints i need to do and log maybe daily or at intervals
+it makes sure i follow through with it and it helps me recover if i fail you can use google ai api for the ai and nexj js pwa mern stack refine the idea and build me a docs with the different phases to build out this entire idea it can be a cchat interface that will be used or whatever you recommend

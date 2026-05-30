@@ -1,5 +1,12 @@
 # Dependencies
 node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -7,16 +14,21 @@ pnpm-debug.log*
 
 # Environment variables
 .env
+.env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
 
 # Build outputs
 dist/
 build/
-.next/
-out/
+/.next/
+/out/
+/public/sw.js
+/public/sw.js.map
+/public/swe-worker-*.js
 
 # IDE
 .vscode/
@@ -28,6 +40,7 @@ out/
 # OS
 .DS_Store
 Thumbs.db
+*.pem
 
 # Logs
 logs/
@@ -36,6 +49,13 @@ logs/
 # Testing
 coverage/
 .nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel
 
 # Documents (internal use only)
 *.pdf
