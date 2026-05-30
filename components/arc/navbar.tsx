@@ -8,7 +8,8 @@ import { PhoneCall } from "lucide-react";
 import { SettingsBar } from "./settings-bar";
 
 const links = [
-  { href: "/chat", label: "Chat" },
+  { href: "/home", label: "Home" },
+  { href: "/chat", label: "Coach" },
   { href: "/today", label: "Today" },
   { href: "/goals/new", label: "Goals" },
   { href: "/progress", label: "Progress" },
@@ -61,9 +62,9 @@ export function Navbar() {
           "after:pointer-events-none after:absolute after:inset-x-4 after:top-0 after:h-px after:max-w-[min(100%,42rem)] after:rounded-full after:bg-linear-to-r after:from-transparent after:via-white/45 after:to-transparent after:opacity-90 dark:after:via-white/18",
         ].join(" ")}
       >
-        <Link href="/chat" className="flex items-center gap-3">
+        <Link href="/home" className="flex items-center gap-3">
           <div className="grid h-9 w-9 place-items-center rounded border border-border-low bg-card">
-            <PhoneCall className="h-4 w-4 text-foreground" aria-hidden />
+            <PhoneCall className="h-4 w-4 text-primary" aria-hidden />
           </div>
           <div className="leading-tight">
             <div className="text-sm font-semibold tracking-wider text-muted">
@@ -85,7 +86,7 @@ export function Navbar() {
                   href={href}
                   className={[
                     "text-sm font-semibold transition",
-                    active ? "text-foreground" : "text-muted hover:text-foreground",
+                    active ? "text-primary" : "text-muted hover:text-foreground",
                   ].join(" ")}
                 >
                   {label}

@@ -18,7 +18,7 @@ export function BadgeGrid({ badges }: { badges: BadgeId[] | string[] }) {
           <div
             key={id}
             className={cn(
-              "rounded-xl border p-4 transition hover:shadow-sm",
+              "rounded border p-4 transition",
               isEarned
                 ? "border-border-low bg-cream/40"
                 : "border-border-low bg-card opacity-60"

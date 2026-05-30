@@ -10,17 +10,17 @@ export function GetStarted({ className }: { className?: string }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) router.replace("/chat");
+    if (user) router.replace("/home");
   }, [user, router]);
 
   const linkClass = [
-    "inline-flex w-full items-center justify-center rounded bg-foreground px-6 py-4 text-base font-semibold text-background transition hover:opacity-90",
+    "inline-flex w-full items-center justify-center rounded bg-primary px-6 py-4 text-base font-semibold text-primary-foreground transition hover:opacity-90",
     className,
   ]
     .filter(Boolean)
     .join(" ");
 
-  const href = user ? "/chat" : "/signup";
+  const href = user ? "/home" : "/signup";
   const label = user ? "Open app" : "Get started";
 
   return (

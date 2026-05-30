@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { PageHeader } from "@/components/arc/page-header";
 import { ChatInterface } from "@/components/chat/chat-interface";
 import { RecoveryBanner } from "@/components/arc/recovery-banner";
 import { WeeklyReviewBanner } from "@/components/arc/weekly-review-banner";
@@ -10,8 +8,6 @@ import { StandardPageSkeleton } from "@/components/arc/skeleton-ui";
 import { useToast } from "@/components/arc/toast";
 import { useChatHistory, useGoals } from "@/lib/hooks/use-callback-data";
 import { isGoalCreationIntent } from "@/lib/goal-intent";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import type { WeeklyReviewDTO } from "@/types";
 
 export default function ChatPage() {
@@ -19,18 +15,6 @@ export default function ChatPage() {
   const { recoveringGoal, refresh: refreshGoals } = useGoals();
   const { toast } = useToast();
   const [pendingReview, setPendingReview] = useState<WeeklyReviewDTO | null>(null);
-  const [aiRemaining, setAiRemaining] = useState<number | null>(null);
-
-  useEffect(() => {
-    fetch("/api/me")
-      .then((r) => r.json())
-      .then((d) => {
-        if (typeof d.user?.aiRemaining === "number") {
-          setAiRemaining(d.user.aiRemaining);
-        }
-      })
-      .catch(() => {});
-  }, [messages]);
 
   useEffect(() => {
     fetch("/api/ai/review")
@@ -61,12 +45,6 @@ export default function ChatPage() {
 
         await refreshGoals();
         await refreshChat();
-        if (typeof res.headers.get("X-AI-Remaining") === "string") {
-          const n = parseInt(res.headers.get("X-AI-Remaining") ?? "", 10);
-          if (!Number.isNaN(n)) setAiRemaining(n);
-        } else if (typeof data.aiRemaining === "number") {
-          setAiRemaining(data.aiRemaining);
-        }
         toast({
           variant: "success",
           title: "Goal created",
@@ -93,12 +71,6 @@ export default function ChatPage() {
           duration: data.upgradeRequired ? 8000 : 5000,
         });
         throw new Error(data.error ?? "Could not send message");
-      }
-      if (typeof res.headers.get("X-AI-Remaining") === "string") {
-        const n = parseInt(res.headers.get("X-AI-Remaining") ?? "", 10);
-        if (!Number.isNaN(n)) setAiRemaining(n);
-      } else if (typeof data.aiRemaining === "number") {
-        setAiRemaining(data.aiRemaining);
       }
       await refreshChat();
 
@@ -217,33 +189,11 @@ export default function ChatPage() {
   );
 
   if (chatLoading) {
-    return (
-      <>
-        <PageHeader label="Coach" title="Chat" />
-        <StandardPageSkeleton cards={1} />
-      </>
-    );
+    return <StandardPageSkeleton cards={1} />;
   }
 
   return (
-    <>
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <PageHeader
-          label="Coach"
-          title="Chat"
-          description={
-            aiRemaining !== null
-              ? `${aiRemaining} free AI messages left · Set goals, log progress, or get recovery help.`
-              : "Set goals, log progress, or get recovery help."
-          }
-        />
-        <Link href="/goals/new">
-          <Button size="sm" variant="secondary" className="gap-1">
-            <Plus className="h-3.5 w-3.5" /> New goal
-          </Button>
-        </Link>
-      </div>
-
+    <div className="flex min-h-0 flex-col gap-3 max-md:-mx-1 max-md:flex-1">
       {recoveringGoal ? (
         <RecoveryBanner
           goalId={recoveringGoal.id}
@@ -265,6 +215,7 @@ export default function ChatPage() {
       ) : null}
 
       <ChatInterface
+        className="max-md:min-h-0 max-md:flex-1"
         initialMessages={messages}
         onSend={handleSend}
         recoveryGoalId={recoveringGoal?.id}
@@ -273,6 +224,6 @@ export default function ChatPage() {
         onApplyReview={applyReview}
         onDismissReview={dismissReview}
       />
-    </>
+    </div>
   );
 }

@@ -6,12 +6,12 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "ComeBack.ai — AI Recovery Coach",
     short_name: "ComeBack.ai",
     description: "Miss a day. Don't miss the goal.",
-    start_url: "/today",
+    start_url: "/home",
     scope: "/",
     display: "standalone",
     display_override: ["standalone", "minimal-ui"],
     background_color: "#ffffff",
-    theme_color: "#059669",
+    theme_color: "#ff385c",
     orientation: "portrait-primary",
     categories: ["productivity", "health", "lifestyle"],
     icons: [
@@ -29,6 +29,12 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     shortcuts: [
+      {
+        name: "Home",
+        short_name: "Home",
+        url: "/home",
+        description: "Quick actions and overview",
+      },
       {
         name: "Today",
         short_name: "Today",

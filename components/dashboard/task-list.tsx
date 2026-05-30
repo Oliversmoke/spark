@@ -42,7 +42,7 @@ export function TaskList({ tasks, goals = [], onLog, loadingTaskId }: TaskListPr
         const loggedCount = goalTasks.filter((t) => t.loggedToday).length;
 
         return (
-          <Card key={goalId} className="overflow-hidden transition hover:shadow-sm">
+          <Card key={goalId}>
             <CardHeader className="space-y-3">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
@@ -102,7 +102,7 @@ function TaskRow({
   return (
     <div
       className={cn(
-        "rounded-lg border p-3 transition hover:border-border-strong",
+        "rounded border p-3 transition",
         status === "completed" && "border-border-low bg-cream/50",
         status === "partial" && "border-border-low bg-cream/30",
         status === "skipped" && "border-border-low bg-bg1"

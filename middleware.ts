@@ -12,7 +12,7 @@ const publicPaths = [
   "/api/templates",
 ];
 
-function safeCallbackUrl(raw: string | null, fallback = "/chat") {
+function safeCallbackUrl(raw: string | null, fallback = "/home") {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return fallback;
   return raw;
 }
@@ -28,7 +28,7 @@ async function redirectIfAuthenticated(req: NextRequest, pathname: string) {
   }
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/chat", req.url));
+    return NextResponse.redirect(new URL("/home", req.url));
   }
 
   if (pathname === "/login" || pathname === "/signup") {

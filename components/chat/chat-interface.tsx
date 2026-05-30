@@ -24,6 +24,7 @@ interface SendResult {
 }
 
 interface ChatInterfaceProps {
+  className?: string;
   initialMessages?: Message[];
   onSend: (message: string) => Promise<SendResult>;
   placeholder?: string;
@@ -58,6 +59,7 @@ function messageGoalId(msg: Message) {
 }
 
 export function ChatInterface({
+  className,
   initialMessages = [],
   onSend,
   placeholder = "Tell me your goal or log progress…",
@@ -121,7 +123,12 @@ export function ChatInterface({
   }
 
   return (
-    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-xl border border-border-low bg-card shadow-sm max-md:h-[calc(100dvh-17rem)] md:min-h-[520px]">
+    <div
+      className={cn(
+        "flex min-h-[420px] flex-col overflow-hidden rounded border border-border-low bg-card max-md:h-[calc(100dvh-12rem)] md:min-h-[520px]",
+        className
+      )}
+    >
       <div
         className="arc-app-scroll flex-1 space-y-3 overflow-y-auto p-4"
         role="log"
@@ -149,7 +156,7 @@ export function ChatInterface({
                   type="button"
                   onClick={() => handleSend(text)}
                   disabled={loading}
-                  className="inline-flex items-center gap-2 rounded-full border border-border-low bg-card px-3 py-1.5 text-xs font-semibold transition hover:bg-cream/60 active:scale-[0.98]"
+                  className="inline-flex items-center gap-2 rounded border border-border-low bg-card px-3 py-1.5 text-xs font-semibold transition hover:border-primary/30 hover:bg-primary/5"
                 >
                   <Icon className="h-3.5 w-3.5" aria-hidden />
                   {label}
@@ -185,9 +192,9 @@ export function ChatInterface({
             <div
               key={msg.id}
               className={cn(
-                "max-w-[92%] rounded-xl px-4 py-3 text-sm leading-relaxed transition",
+                "max-w-[92%] rounded px-4 py-3 text-sm leading-relaxed",
                 msg.role === "user"
-                  ? "ml-auto bg-foreground text-background"
+                  ? "ml-auto bg-primary text-primary-foreground"
                   : "border border-border-low bg-bg1"
               )}
               role="article"
@@ -235,14 +242,14 @@ export function ChatInterface({
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-border-low bg-card/80 p-3 backdrop-blur-sm">
+      <div className="border-t border-border-low p-4">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
         >
-          <div className="flex items-end gap-2">
+          <div className="flex items-center gap-2">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -256,20 +263,20 @@ export function ChatInterface({
                 }
               }}
               aria-describedby="chat-input-hint"
-              className="min-h-[44px] flex-1 resize-none py-2.5"
+              className="min-h-11 flex-1 resize-none py-2 leading-snug"
             />
             <Button
               type="submit"
               size="icon"
               disabled={loading || !input.trim()}
               aria-label="Send message"
-              className="h-11 w-11 shrink-0 rounded-lg"
+              className="size-11 shrink-0"
             >
               <Send className="h-4 w-4" />
             </Button>
           </div>
-          <p id="chat-input-hint" className="mt-1.5 text-center text-[11px] text-muted">
-            Enter to send · Shift+Enter for new line
+          <p id="chat-input-hint" className="sr-only">
+            Enter to send, Shift+Enter for a new line
           </p>
         </form>
       </div>

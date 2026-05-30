@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
-  MessageCircle,
+  Home,
   CalendarCheck,
   TrendingUp,
   Settings,
@@ -21,7 +21,7 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
-  { href: "/chat", label: "Chat", Icon: MessageCircle },
+  { href: "/home", label: "Home", Icon: Home },
   { href: "/today", label: "Today", Icon: CalendarCheck },
   { href: "/goals/new", label: "New", Icon: Plus, variant: "fab" },
   { href: "/progress", label: "Progress", Icon: TrendingUp },
@@ -117,7 +117,7 @@ export function BottomTabs() {
                     if (e.key === "Enter" || e.key === " ") setMenuOpen((v) => !v);
                     if (e.key === "Escape") setMenuOpen(false);
                   }}
-                  className="absolute z-30 grid size-16 shrink-0 translate-y-[-122%] place-items-center rounded-full bg-foreground text-background ring-2 ring-background"
+                  className="absolute z-30 grid size-16 shrink-0 translate-y-[-122%] place-items-center rounded-full bg-primary text-primary-foreground ring-2 ring-background"
                 >
                   <Icon className="h-8 w-8" aria-hidden />
                 </span>
@@ -134,7 +134,7 @@ export function BottomTabs() {
               href={t.href}
               className={[
                 "flex touch-manipulation flex-col items-center gap-2 px-0.5 py-0.5 pb-1 text-[10px] font-semibold leading-none tracking-tight transition active:opacity-80",
-                active ? "text-foreground" : "text-muted hover:text-foreground",
+                active ? "text-primary" : "text-muted hover:text-foreground",
               ].join(" ")}
             >
               <Icon className="h-[1.35rem] w-[1.35rem]" aria-hidden />

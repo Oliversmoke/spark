@@ -14,8 +14,11 @@ export default function NotFound() {
           This screen doesn&apos;t exist. Head back to your coach or today&apos;s tasks.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/home">
+            <Button>Go home</Button>
+          </Link>
           <Link href="/chat">
-            <Button>Open Chat</Button>
+            <Button variant="secondary">Open coach</Button>
           </Link>
           <Link href="/today">
             <Button variant="secondary">Go to Today</Button>

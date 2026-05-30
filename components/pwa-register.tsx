@@ -1,22 +1,47 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
-export function PwaRegister() {
+/** Registers the service worker globally (no install UI). */
+export function PwaServiceWorker() {
+  useEffect(() => {
+    if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
+  return null;
+}
+
+const INSTALL_DISMISS_KEY = "comeback-pwa-install-dismissed";
+
+/** Install prompt — homepage only (`/`). */
+export function PwaInstallBanner() {
+  const pathname = usePathname();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(
     null
   );
   const [showInstall, setShowInstall] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
+  const isHomePage = pathname === "/";
+
   useEffect(() => {
     setIsStandalone(
       window.matchMedia("(display-mode: standalone)").matches ||
         (window.navigator as Navigator & { standalone?: boolean }).standalone === true
     );
+  }, []);
 
-    if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+  useEffect(() => {
+    if (!isHomePage) {
+      setShowInstall(false);
+      return;
+    }
+
+    if (sessionStorage.getItem(INSTALL_DISMISS_KEY) === "1") {
+      return;
     }
 
     const handler = (e: Event) => {
@@ -26,7 +51,7 @@ export function PwaRegister() {
     };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
+  }, [isHomePage]);
 
   async function install() {
     if (!deferredPrompt) return;
@@ -36,23 +61,30 @@ export function PwaRegister() {
     setDeferredPrompt(null);
   }
 
-  if (isStandalone || !showInstall) return null;
+  function dismiss() {
+    sessionStorage.setItem(INSTALL_DISMISS_KEY, "1");
+    setShowInstall(false);
+  }
+
+  if (!isHomePage || isStandalone || !showInstall) return null;
 
   return (
-    <div className="fixed bottom-24 left-4 right-4 z-[1500] mx-auto max-w-lg rounded border border-border-low bg-card p-4 shadow-[0_18px_70px_-55px_rgba(0,0,0,0.55)] md:bottom-6">
+    <div className="fixed bottom-6 left-4 right-4 z-[1500] mx-auto max-w-lg rounded border border-border-low bg-card p-4 shadow-[0_18px_70px_-55px_rgba(0,0,0,0.55)]">
       <p className="text-sm font-semibold">Install ComeBack.ai</p>
       <p className="text-xs text-muted">
         Add to your home screen for quick access, offline Today view, and reminders.
       </p>
       <div className="mt-3 flex gap-2">
         <button
+          type="button"
           onClick={install}
-          className="rounded bg-foreground px-3 py-1.5 text-xs font-semibold text-background"
+          className="rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
         >
           Install
         </button>
         <button
-          onClick={() => setShowInstall(false)}
+          type="button"
+          onClick={dismiss}
           className="rounded px-3 py-1.5 text-xs font-semibold text-muted"
         >
           Later

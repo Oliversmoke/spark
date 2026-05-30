@@ -53,7 +53,7 @@ export function OnboardingTour({
                 key={index}
                 className={cn(
                   "h-1.5 flex-1 rounded-full",
-                  index <= step ? "bg-foreground" : "bg-border-low"
+                  index <= step ? "bg-primary" : "bg-border-low"
                 )}
               />
             ))}

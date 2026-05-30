@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 type AuthMode = "login" | "signup";
 
 function safeCallbackUrl(raw: string | null) {
-  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/chat";
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/home";
   return raw;
 }
 

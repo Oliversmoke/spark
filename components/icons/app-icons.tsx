@@ -46,7 +46,7 @@ export function TemplateIcon({
   return (
     <span
       className={cn(
-        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border-low bg-cream/50",
+        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded border border-border-low bg-cream/50",
         className
       )}
       aria-hidden
@@ -66,7 +66,7 @@ export function BadgeIcon({
   return (
     <span
       className={cn(
-        "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border",
+        "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded border",
         earned
           ? "border-border-low bg-cream/60"
           : "border-border-low bg-card",
@@ -117,7 +117,7 @@ export function EmptyStateIcon({
   return (
     <span
       className={cn(
-        "mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full border border-border-low bg-cream/40",
+        "mb-4 inline-flex h-14 w-14 items-center justify-center rounded border border-border-low bg-cream/40",
         className
       )}
       aria-hidden

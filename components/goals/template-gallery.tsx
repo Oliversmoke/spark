@@ -136,10 +136,10 @@ export function TemplateGallery({
             aria-selected={category === cat.id}
             onClick={() => setCategory(cat.id)}
             className={cn(
-              "rounded-full border px-4 py-2 text-sm font-semibold transition active:scale-[0.98]",
+              "rounded border px-3 py-1.5 text-sm font-semibold transition",
               category === cat.id
-                ? "border-foreground bg-foreground text-background"
-                : "border-border-low bg-card text-muted hover:border-border-strong hover:text-foreground"
+                ? "border-border-low bg-card text-foreground"
+                : "border-transparent text-muted hover:text-foreground"
             )}
           >
             {cat.label}
@@ -190,7 +190,7 @@ export function TemplateGallery({
       </div>
 
       {selectedId ? (
-        <div className="space-y-4 rounded-xl border border-border-low bg-cream/20 p-4 md:p-5">
+        <div className="space-y-4 rounded border border-border-low bg-cream/20 p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">Template preview</p>
@@ -216,7 +216,7 @@ export function TemplateGallery({
           ) : null}
         </div>
       ) : (
-        <p className="rounded-lg border border-dashed border-border-low py-8 text-center text-sm text-muted">
+        <p className="rounded border border-dashed border-border-low py-8 text-center text-sm text-muted">
           Select a template above to preview its full path.
         </p>
       )}

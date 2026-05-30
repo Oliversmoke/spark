@@ -9,6 +9,7 @@ import { PhoneCall } from "lucide-react";
 import { SettingsBar } from "@/components/arc/settings-bar";
 import { MobileSplash } from "@/components/arc/mobile-splash";
 import { GetStarted } from "@/components/arc/get-started";
+import { PwaInstallBanner } from "@/components/pwa-register";
 
 const AnimatedBentoGrid = dynamic(
   () =>
@@ -44,11 +45,12 @@ export default function LandingPage() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) router.replace("/chat");
+    if (user) router.replace("/home");
   }, [user, router]);
 
   return (
     <main className="min-h-dvh bg-bg1 text-foreground">
+      <PwaInstallBanner />
       <MobileSplash />
 
       {/* Desktop */}
