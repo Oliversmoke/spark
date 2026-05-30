@@ -3,10 +3,10 @@
 > **The AI Recovery Coach That Helps You Restart**  
 > Because most people don't fail — they just stop trying.
 
-[![Build With AI Hackathon](https://img.shields.io/badge/GDG%20Lagos-2025-4285F4?style=flat-square&logo=google)](https://gdg.community.dev/gdg-lagos/)
+[![Build With AI Hackathon](https://img.shields.io/badge/GDG%20Lagos-2026-4285F4?style=flat-square&logo=google)](https://gdg.community.dev/gdg-lagos/)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Powered-4285F4?style=flat-square&logo=google-cloud)](https://cloud.google.com/)
 [![Gemini 2.5](https://img.shields.io/badge/Gemini-2.5-8E75B2?style=flat-square)](https://ai.google.dev/)
-[![Firebase](https://img.shields.io/badge/Firebase-Latest-FFCA28?style=flat-square&logo=firebase)](https://firebase.google.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/atlas)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
@@ -126,30 +126,23 @@ Talk to AI like a real coach:
 
 ## 🛠️ Technology Stack
 
-We're using the latest versions of modern, production-ready technologies:
-
 ### Frontend
 - **React 18.3** with TypeScript 5.6
-- **Material-UI (MUI) v6** for beautiful, accessible components
-- **Vite 6** for lightning-fast development
+- **Material-UI (MUI) v6** for UI components
+- **Vite 6** for development and build
 - **React Router v7** for navigation
 
-### AI & Backend
-- **Google Gemini 2.5** via AI Studio (function calling, embeddings, multimodal)
-- **Firebase Firestore** for real-time database
-- **Cloud Functions** (Node.js 20) for serverless backend
-- **Firebase Authentication** (Google Sign-In, Phone OTP)
+### Backend & AI
+- **Node.js 20** with Express.js
+- **Google Gemini 2.5** for AI agents (function calling, embeddings, multimodal)
+- **MongoDB Atlas** for database
+- **JWT** for authentication
+- **Google Cloud Run** for deployment
 
 ### Infrastructure
-- **Firebase Hosting** with CDN
-- **Google Cloud Platform** for all services
+- **Google Cloud Platform** (Cloud Run, Secret Manager)
+- **MongoDB Atlas** (managed database cluster)
 - **GitHub Actions** for CI/CD
-
-### Development Tools
-- **ESLint 9** with TypeScript support
-- **Prettier 3** for code formatting
-- **Vitest** for unit testing
-- **Playwright** for E2E testing
 
 ---
 
@@ -178,22 +171,23 @@ Provides empathetic coaching and detects burnout.
 
 ### Prerequisites
 - Node.js 20+ and npm 10+
-- Firebase CLI (`npm install -g firebase-tools`)
+- Google Cloud CLI (`gcloud`)
+- MongoDB Atlas account
 - Google Cloud account with Gemini API access
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/comeback-ai.git
-cd comeback-ai
+git clone https://github.com/Oliversmoke/spark.git
+cd spark
 
 # Install dependencies
 npm install
 
 # Set up environment variables
 cp .env.example .env
-# Add your Firebase and Gemini API credentials
+# Add your MongoDB, Gemini API, and JWT credentials
 
 # Start development server
 npm run dev
@@ -202,25 +196,34 @@ npm run dev
 ### Environment Variables
 
 ```env
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-VITE_GEMINI_API_KEY=your_gemini_api_key
+# MongoDB
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/comeback-ai
+
+# Gemini AI
+GEMINI_API_KEY=your_gemini_api_key
+
+# JWT Authentication
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+
+# Server
+PORT=8080
+NODE_ENV=development
 ```
 
-### Available Scripts
+### Deployment to Cloud Run
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-npm run format       # Format code with Prettier
-npm run test         # Run unit tests
-npm run test:e2e     # Run E2E tests
+# Build and deploy to Cloud Run
+gcloud run deploy comeback-ai \
+  --source . \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated
+
+# Set environment variables
+gcloud run services update comeback-ai \
+  --update-env-vars MONGODB_URI=your_mongodb_uri,GEMINI_API_KEY=your_api_key
 ```
 
 ---
@@ -229,45 +232,33 @@ npm run test:e2e     # Run E2E tests
 
 ```
 comeback-ai/
-├── src/
-│   ├── components/        # React components
-│   │   ├── goals/        # Goal-related components
-│   │   ├── checkins/     # Check-in components
-│   │   ├── recovery/     # Recovery plan components
-│   │   └── shared/       # Shared UI components
-│   ├── services/         # Business logic
-│   │   ├── ai/          # AI agent implementations
-│   │   ├── firebase/    # Firebase services
-│   │   └── api/         # API integrations
-│   ├── hooks/           # Custom React hooks
-│   ├── types/           # TypeScript type definitions
-│   ├── utils/           # Utility functions
-│   └── App.tsx          # Main application component
-├── functions/           # Cloud Functions
+├── client/                # React frontend
 │   ├── src/
-│   │   ├── agents/     # AI agent logic
-│   │   ├── triggers/   # Firestore triggers
-│   │   └── api/        # HTTP endpoints
-├── firestore.rules     # Firestore security rules
-├── firebase.json       # Firebase configuration
-└── package.json        # Dependencies
+│   │   ├── components/   # React components
+│   │   ├── services/     # API services
+│   │   ├── hooks/        # Custom React hooks
+│   │   └── types/        # TypeScript types
+│   └── package.json
+├── server/               # Node.js backend
+│   ├── src/
+│   │   ├── routes/      # API routes
+│   │   ├── models/      # MongoDB models
+│   │   ├── agents/      # AI agent logic
+│   │   ├── middleware/  # Auth & validation
+│   │   └── utils/       # Helper functions
+│   ├── Dockerfile       # Cloud Run container
+│   └── package.json
+└── README.md
 ```
 
 ---
 
 ## 🎨 Design Philosophy
 
-### Compassion Over Punishment
-Every interaction is designed to be supportive, not judgmental. We meet users where they are.
-
-### Simplicity Over Complexity
-Clean interfaces. Clear language. No overwhelming dashboards or confusing metrics.
-
-### Progress Over Perfection
-We celebrate small wins and gradual improvement. Consistency beats intensity.
-
-### Intelligence Over Automation
-AI adapts to user behavior rather than forcing users to adapt to rigid systems.
+- **Compassion Over Punishment** — Supportive interactions, not judgmental
+- **Simplicity Over Complexity** — Clean interfaces, clear language
+- **Progress Over Perfection** — Celebrate small wins and gradual improvement
+- **Intelligence Over Automation** — AI adapts to users, not the other way around
 
 ---
 
@@ -307,21 +298,13 @@ In 5 years, we want people to say:
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Fork the repository, create a feature branch, and submit a pull request.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
@@ -331,28 +314,10 @@ Built with ❤️ by the Spark team for the Build With AI Hackathon, GDG Lagos 2
 
 ---
 
-## 🙏 Acknowledgments
-
-- **GDG Lagos** for organizing the Build With AI Hackathon
-- **Google Cloud** for providing the infrastructure
-- **Gemini Team** for the powerful AI capabilities
-- **Everyone who has ever abandoned a goal** — this is for you
-
----
-
-## 📞 Contact & Support
-
-- **Website:** [comeback-ai.com](https://comeback-ai.com) *(coming soon)*
-- **Email:** hello@comeback-ai.com
-- **Twitter:** [@ComeBackAI](https://twitter.com/ComeBackAI)
-- **Discord:** [Join our community](https://discord.gg/comeback-ai)
-
----
-
 <div align="center">
 
 **ComeBack AI — Helping people restart what they never should have stopped.**
 
-[Get Started](#-getting-started) • [View Demo](https://demo.comeback-ai.com) • [Read Docs](https://docs.comeback-ai.com)
+[Get Started](#-getting-started) • [View Demo](https://demo.comeback-ai.com)
 
 </div>
