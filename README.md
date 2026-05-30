@@ -1,4 +1,4 @@
-# ComeBack AI
+# ComeBack.ai
 
 > **The AI Recovery Coach That Helps You Restart**  
 > Because most people don't fail — they just stop trying.
